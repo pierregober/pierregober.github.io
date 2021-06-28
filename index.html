@@ -1,79 +1,48 @@
 <!DOCTYPE html>
 <head>
-<style>   
-      #main{
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        width: 100%;
-        margin-top: 5vh;
-      }
-      #title{
-        margin: 1rem;
-        font-weight: 700;
-        background-color: beige;
-        padding: 2rem;
-      }
-      #image{
-
-        max-width: 100%;
-        display:block;
-        margin: auto;
-      }
-      #img-div{
-        margin: 0rem 2rem .5rem 2rem;
-        padding: 1rem;
-        background-color: aliceblue;
-        display:block;
-      }
-      #tribute-info{
-        width: 50%;
-        margin: auto;
-        text-align: left;
-      }
-      #tribute-container{
-        background-color: beige;
-        margin: 0rem 2rem 2rem 2rem;
-      }
-      #tribute-link-container{
-        margin: 1rem;
-        background-color: aliceblue;
-        padding: 2rem;
-      }
-    </style>
+  <style>   
+  </style>
 </head>
 <html>
     <body>
-      <div id=main>
-        <h1 id="title">Dr. Norman Borlaug</h1>
-        <p>Some guy who saved bees</p>
-          <figure id="img-div">
-            <img id="image" title="The living and breathing legend himself" src="https://www.pe.com/wp-content/uploads/migration/n1r/n1rlyv-imagesdaily.2011.0121.nbees2134o12ixx8400binary304447.jpg?w=1101"/>
-            <figcaption id="img-caption">Dr. Borlaug deep in thought<figcaption>
-            </figure>
-            <div id="tribute-container">
-            <div id="tribute-info">
-              <ul type="square">
-                <li><b>1914</b> - Born in Cresco, Iowa</li>
-                <li><b>1933</b> - Leaves his family's farm to attend the University of Minnesota, thanks to a Depression era program known as the "National Youth Administration"</li>
-                <li><b>1935</b> - Has to stop school and save up more money. Works in the Civilian Conservation Corps, helping starving Americans. "I saw how food changed them", he said. "All of this left scars on me."</li>
-                <li><b>1937</b> - Finishes university and takes a job in the US Forestry Service</li>
-                <li><b>1938</b> - Marries wife of 69 years Margret Gibson. Gets laid off due to budget cuts. Inspired by Elvin Charles Stakman, he returns to school study under Stakman, who teaches him about breeding pest-resistent plants.</li>
-                <li><b>1941</b> - Tries to enroll in the military after the Pearl Harbor attack, but is rejected. Instead, the military asked his lab to work on waterproof glue, DDT to control malaria, disinfectants, and other applied science.</li>
-                <li><b>1942</b> - Receives a Ph.D. in Genetics and Plant Pathology</li>
-                <li><b>1944</b> - Rejects a 100% salary increase from Dupont, leaves behind his pregnant wife, and flies to Mexico to head a new plant pathology program. Over the next 16 years, his team breeds 6,000 different strains of disease resistent wheat - including different varieties for each major climate on Earth.</li>
-                <li><b>1945</b> - Discovers a way to grown wheat twice each season, doubling wheat yields</li>
-                <li><b>1953</b> - crosses a short, sturdy dwarf breed of wheat with a high-yeidling American breed, creating a strain that responds well to fertilizer. It goes on to provide 95% of Mexico's wheat.</li>
-                <li><b>1962</b> - Visits Delhi and brings his high-yielding strains of wheat to the Indian subcontinent in time to help mitigate mass starvation due to a rapidly expanding population</li>
-                <li><b>1970</b> - receives the Nobel Peace Prize</li>
-                <li><b>2009</b> - dies from a bee sting at the age of 95.</li>
-              </ul>
-            </div>
-          </div>
-          <div id="tribute-link-container">
-            <a id="tribute-link" href="www.google.com" target="_blank">Click me to go somewhere</a>
-          </div>
-        </div>
+        <div id=entryPoint></div>
     </body>
-    <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+    <script type="text/javascript">
+        var $personEle = null;                                                      
+        var $entryPointEle = document.getElementById("entryPoint");
+        var $getPostBtn = null;
+        var $userPosts = null;
+        var $userPostsContainer = document.createElement("div")
+        
+        window.onload = function start(){
+            fetch("https://jsonplaceholder.typicode.com/users")
+                .then(response => response.json())
+                .then(data => displayPeople(data));
+        }
+
+        function displayPeople(peopleData){
+                console.log("peopleData", peopleData)
+                peopleData.forEach(a => {
+                    $personEle = document.createElement("div")
+                    $personEle.innerText = "FirstName: " + a.name +  ", Email: " + a.email;
+                    $entryPointEle.appendChild($personEle);
+                    $getPostBtn = document.createElement("button");
+                    $getPostBtn.innerText = "Get User's Posts";
+                    $getPostBtn.onclick = function(){ fetch('https://jsonplaceholder.typicode.com/posts/'+ a.id +'/posts')
+                        .then((response) => response.json())
+                        .then((json) => showUsersPosts(json));}
+                    $entryPointEle.appendChild($getPostBtn);
+                    $entryPointEle.appendChild($userPostsContainer);
+                });  
+            }
+
+        function showUsersPosts(posts){
+            posts.forEach(b => {
+                $userPosts = document.createElement("div")
+                $userPosts.innerText = "Title: " + b.title;
+                $userPostsContainer.appendChild($userPosts);
+            })
+        }
+
+    </script>
 </html>
