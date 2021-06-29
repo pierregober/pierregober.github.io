@@ -72,8 +72,8 @@
 <html>
     <body>
         <div id="main-container">
-                <div id=entryPoint></div>
-                <div id=entryPointPosts></div>
+            <div id=entryPoint></div>
+            <div id=entryPointPosts></div>
         </div>
     </body>
     <script type="text/javascript">
@@ -100,12 +100,18 @@
                     $getPostBtn = document.createElement("div");
                     $getPostBtn.id = "getPostBtn";
                     $getPostBtn.innerText = "Get User's Posts";
-                    $getPostBtn.onclick = function(){ fetch('https://jsonplaceholder.typicode.com/posts/'+ a.id +'/posts')
-                        .then((response) => response.json())
-                        .then((json) => showUsersPosts(json));}
+                    $getPostBtn.addEventListener("click", function(){
+                        getUserPosts(a.id);
+                    })
                     $entryPointEle.appendChild($getPostBtn);
                 });  
             }
+
+        function getUserPosts(id){
+            fetch('https://jsonplaceholder.typicode.com/posts/'+ id +'/posts')
+                    .then((response) => response.json())
+                    .then((json) => showUsersPosts(json));
+        }
 
         function showUsersPosts(posts){
                 $userPostsEntryPoint.innerHTML = "";
